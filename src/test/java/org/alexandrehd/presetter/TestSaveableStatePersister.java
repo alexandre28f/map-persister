@@ -9,12 +9,11 @@ import java.util.Map;
 import org.junit.Test;
 
 public class TestSaveableStatePersister {
-
 	@Test
 	public void testPersistAndUnpersist() throws Exception {
 		float[][] twoD = new float[][] { new float[] { 1f }, new float[] { 2f }};
 		Map<String, SaveableState> m = new HashMap<String, SaveableState>();
-		m.put("A", new SaveableState(null, new float[] { 1.0f, 2.0f }, twoD));
+		m.put("MIX", new SaveableState(null, new float[] { 1.0f, 2.0f }, twoD));
 		
 		SaveableState state = new SaveableState(m, new float[] { 3f, 4f }, twoD);
 		
