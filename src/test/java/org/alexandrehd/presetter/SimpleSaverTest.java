@@ -30,4 +30,24 @@ public class SimpleSaverTest {
 		File f = File.createTempFile("bogosave", ".tmpsaved");
 		SimpleSaver.persist((HashMap<String, ?>) m, f);
 	}
+	
+	static class Fooble<T> extends HashMap<String, T> {
+		private static final long serialVersionUID = 1L;
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void testCannotSaveHashMapSubclass() throws IOException {
+		File f = File.createTempFile("bogosave", ".tmpsaved");
+		SimpleSaver.persist(new Fooble<Double>(), f);
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void testCannotSaveInnerHashMapSubclass() throws IOException {
+		Fooble<Double> fd = new Fooble<Double>();
+		HashMap<String, HashMap<String, Double>> m = new HashMap<String, HashMap<String, Double>>();
+		m.put("FOOBLE", fd);
+		
+		File f = File.createTempFile("bogosave", ".tmpsaved");
+		SimpleSaver.persist(m, f);
+	}
 }

@@ -1,7 +1,6 @@
 package org.alexandrehd.presetter;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -24,8 +23,12 @@ public class SimpleSaver {
 	
 	@SuppressWarnings("unchecked")
 	static private void checkAllTypesOK(HashMap<String, ?> map) throws IllegalArgumentException {
+		if (map.getClass() != HashMap.class) {
+			throw new IllegalArgumentException("cannot serialise type " + map.getClass());
+		}
+		
 		for (Object o: map.values()) {
-			if (o instanceof HashMap) {
+			if (o.getClass() == HashMap.class) {
 				checkAllTypesOK((HashMap<String, ?>) o);
 			} else if (!allowedTypes.contains(o.getClass())) {
 				throw new IllegalArgumentException("cannot serialise type " + o.getClass());
