@@ -3,7 +3,6 @@ package mi.presetmanager.newps;
 import java.io.File;
 import java.util.HashSet;
 
-import mi.basicdata.ScalarParam;
 import mi.interf.IEditState;
 import mi.interf.newps.IEditChangeNotifiable;
 import mi.interf.newps.IPrincipalPreset;
@@ -13,6 +12,7 @@ import mi.interf.newps.ISecondaryPresetManager;
 import mi.presetmanager.EditBuffer;
 import mi.util.IFileUtils;
 
+import org.alexandrehd.presetter.legacy.ScalarParam;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;

@@ -9,7 +9,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
-import mi.basicdata.VectorParam;
 import mi.interf.IEditState;
 import mi.interf.newps.IEditChangeNotifiable;
 import mi.interf.newps.IPrincipalPreset;
@@ -19,6 +18,7 @@ import mi.util.Cloner;
 import mi.util.IMultiLinePrinter;
 import mi.util.TestingManifest;
 
+import org.alexandrehd.presetter.legacy.VectorParam;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;

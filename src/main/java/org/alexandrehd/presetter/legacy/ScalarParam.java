@@ -1,4 +1,4 @@
-package mi.basicdata;
+package org.alexandrehd.presetter.legacy;
 
 import java.io.Serializable;
 
@@ -9,5 +9,5 @@ public class ScalarParam implements Serializable {
 		this.x = x;
 	}
 	
-	public float x  ;
+	public float x;
 }

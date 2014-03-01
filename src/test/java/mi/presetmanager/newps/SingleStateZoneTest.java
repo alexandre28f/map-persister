@@ -1,12 +1,12 @@
 package mi.presetmanager.newps;
 
 import static org.junit.Assert.*;
-import mi.basicdata.VectorParam;
 import mi.interf.IEditState;
 import mi.interf.newps.IZone;
 import mi.presetmanager.EditBuffer;
 import mi.util.TestingManifest;
 
+import org.alexandrehd.presetter.legacy.VectorParam;
 import org.junit.Test;
 
 public class SingleStateZoneTest {

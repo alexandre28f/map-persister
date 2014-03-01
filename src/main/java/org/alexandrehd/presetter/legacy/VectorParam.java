@@ -1,4 +1,4 @@
-package mi.basicdata;
+package org.alexandrehd.presetter.legacy;
 
 import java.io.Serializable;
 

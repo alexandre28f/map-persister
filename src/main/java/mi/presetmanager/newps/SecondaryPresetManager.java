@@ -4,7 +4,6 @@ package mi.presetmanager.newps;
 
 import java.util.UUID;
 
-import mi.basicdata.VectorParam;
 import mi.interf.IEditState;
 import mi.interf.flow.ISequencerListener;
 import mi.interf.newps.IEditChangeNotifiable;
@@ -13,6 +12,7 @@ import mi.interf.newps.ISecondaryPresetManager;
 import mi.presetmanager.TransientPresetTemplate;
 import mi.util.IMultiLinePrinter;
 
+import org.alexandrehd.presetter.legacy.VectorParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

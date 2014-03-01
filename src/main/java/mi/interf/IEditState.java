@@ -2,8 +2,9 @@ package mi.interf;
 
 import java.io.Serializable;
 
-import mi.basicdata.ScalarParam;
-import mi.basicdata.VectorParam;
+import org.alexandrehd.presetter.legacy.ScalarParam;
+import org.alexandrehd.presetter.legacy.VectorParam;
+
 import mi.interf.newps.IBasicPresetState;
 import mi.interf.newps.IDeepCloneable;
 import mi.presetmanager.newps.json.EditBufferState;

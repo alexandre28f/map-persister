@@ -1,6 +1,7 @@
 package mi.interf.newps;
 
-import mi.basicdata.VectorParam;
+import org.alexandrehd.presetter.legacy.VectorParam;
+
 import mi.interf.IEditState;
 import mi.interf.flow.ISequencerListener;
 import mi.util.IPrettyPrintable;

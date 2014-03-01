@@ -1,7 +1,8 @@
 package mi.presetmanager;
 
-import mi.basicdata.ScalarParam;
-import mi.basicdata.VectorParam;
+import org.alexandrehd.presetter.legacy.ScalarParam;
+import org.alexandrehd.presetter.legacy.VectorParam;
+
 import mi.interf.IEditState;
 import mi.presetmanager.newps.json.EditBufferState;
 import mi.util.IMultiLinePrinter;

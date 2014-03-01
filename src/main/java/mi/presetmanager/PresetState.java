@@ -2,8 +2,8 @@ package mi.presetmanager;
 
 import java.io.Serializable;
 
-import mi.basicdata.ScalarParam;
-import mi.basicdata.VectorParam;
+import org.alexandrehd.presetter.legacy.ScalarParam;
+import org.alexandrehd.presetter.legacy.VectorParam;
 
 /** The encapsulated state of a single preset (by which we also mean any live
  	edit buffer).

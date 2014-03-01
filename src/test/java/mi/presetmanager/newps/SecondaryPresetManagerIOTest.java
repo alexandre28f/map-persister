@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import java.io.File;
 import java.net.URL;
 
-import mi.basicdata.ScalarParam;
 import mi.interf.IEditState;
 import mi.interf.newps.IEditChangeNotifiable;
 import mi.interf.newps.IPrincipalPreset;
@@ -17,6 +16,7 @@ import mi.util.IFileUtils;
 import mi.util.TestingManifest;
 import mi.util.VariousUtils;
 
+import org.alexandrehd.presetter.legacy.ScalarParam;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;

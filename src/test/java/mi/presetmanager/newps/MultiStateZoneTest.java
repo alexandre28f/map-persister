@@ -3,13 +3,13 @@ package mi.presetmanager.newps;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import mi.basicdata.VectorParam;
 import mi.interf.IEditState;
 import mi.interf.newps.IZone;
 import mi.interf.newps.IZoneableParameter;
 import mi.presetmanager.EditBuffer;
 import mi.util.TestingManifest;
 
+import org.alexandrehd.presetter.legacy.VectorParam;
 import org.junit.Test;
 
 public class MultiStateZoneTest {

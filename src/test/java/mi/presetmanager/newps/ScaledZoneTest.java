@@ -1,10 +1,10 @@
 package mi.presetmanager.newps;
 
 import static org.junit.Assert.assertEquals;
-import mi.basicdata.ScalarParam;
 import mi.presetmanager.EditBuffer;
 import mi.util.TestingManifest;
 
+import org.alexandrehd.presetter.legacy.ScalarParam;
 import org.junit.Test;
 
 public class ScaledZoneTest {
