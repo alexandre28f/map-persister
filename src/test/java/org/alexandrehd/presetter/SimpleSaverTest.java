@@ -17,6 +17,7 @@ public class SimpleSaverTest {
 		m.put("FOOBLE", 4.0);
 		
 		File f = File.createTempFile("bogosave", ".tmpsaved");
+		f.deleteOnExit();
 		SimpleSaver.persist((HashMap<String, ?>) m, f);
 		
 		assertEquals(m, SimpleSaver.unpersist(f));
@@ -28,6 +29,7 @@ public class SimpleSaverTest {
 		m.put("FOO", new Date());
 		
 		File f = File.createTempFile("bogosave", ".tmpsaved");
+		f.deleteOnExit();
 		SimpleSaver.persist((HashMap<String, ?>) m, f);
 	}
 	
@@ -38,6 +40,7 @@ public class SimpleSaverTest {
 	@Test(expected=IllegalArgumentException.class)
 	public void testCannotSaveHashMapSubclass() throws IOException {
 		File f = File.createTempFile("bogosave", ".tmpsaved");
+		f.deleteOnExit();
 		SimpleSaver.persist(new Fooble<Double>(), f);
 	}
 
@@ -48,6 +51,7 @@ public class SimpleSaverTest {
 		m.put("FOOBLE", fd);
 		
 		File f = File.createTempFile("bogosave", ".tmpsaved");
+		f.deleteOnExit();
 		SimpleSaver.persist(m, f);
 	}
 }
