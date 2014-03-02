@@ -14,6 +14,8 @@ public class SpilledSaver {
 	private int itsDirectoryDepth;
 	private File itsRoot;
 	
+	static private final String EXTENSION = ".ser";
+	
 	public SpilledSaver(File root, int directoryDepth) {
 		itsDirectoryDepth = directoryDepth;
 		itsRoot = root;
@@ -22,7 +24,7 @@ public class SpilledSaver {
 	@SuppressWarnings("unchecked")
 	public void persist(HashMap<String, ?> map) throws IOException {
 		if (itsDirectoryDepth == 0) {
-			SimpleSaver.persist(map, new File(itsRoot.getParent(), itsRoot.getName() + ".ser"));
+			SimpleSaver.persist(map, new File(itsRoot.getParent(), itsRoot.getName() + EXTENSION));
 		} else {
 			if (!itsRoot.mkdir()) {
 				throw new IOException("cannot create directory: " + itsRoot);
@@ -37,6 +39,16 @@ public class SpilledSaver {
 					SimpleSaver.persistAny(v, new File(itsRoot, k + ".ser"));
 				}
 			}
+		}
+	}
+	
+	public HashMap<String, ?> unpersist() throws ClassNotFoundException, IOException {
+		File serialised = new File(itsRoot.getParent(), itsRoot.getName() + EXTENSION);
+
+		if (serialised.exists()) {
+			return SimpleSaver.unpersist(serialised);
+		} else {
+			return null;
 		}
 	}
 }

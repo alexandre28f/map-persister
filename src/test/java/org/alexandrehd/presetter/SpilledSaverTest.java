@@ -3,19 +3,21 @@ package org.alexandrehd.presetter;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashMap;
 
 import org.junit.Test;
 
 public class SpilledSaverTest {
-	private HashMap<String, HashMap<String, Double>> testMap() {
-		HashMap<String, Double> m = new HashMap<String, Double>();
+	private HashMap<String, HashMap<String, Object>> testMap() {
+		HashMap<String, Object> m = new HashMap<String, Object>();
 		m.put("A", 1.0);
 		m.put("B", 2.0);
 		m.put("C", 3.0);
+		//m.put("D", new double[] { 10, 11, 12 });
 		
-		HashMap<String, HashMap<String, Double>> m2 = new HashMap<String, HashMap<String, Double>>();
+		HashMap<String, HashMap<String, Object>> m2 = new HashMap<String, HashMap<String, Object>>();
 		
 		m2.put("TOP", m);
 		
@@ -66,5 +68,25 @@ public class SpilledSaverTest {
 
 		File ser = new File(d, "A.ser");
 		assertTrue("serialised file exists", ser.isFile());
+	}
+	
+	@Test
+	public void testCanUnpersistUnnested() throws Exception {
+		File f = File.createTempFile("bogosave", ".tmpsaved");
+		f.deleteOnExit();
+
+		SpilledSaver saver = new SpilledSaver(f, 0);
+		saver.persist(testMap());
+		assertEquals(testMap(), saver.unpersist());
+	}
+	
+	@Test
+	public void testCanUnpersistNested() throws Exception {
+		File f = File.createTempFile("bogosave", ".tmpsaved");
+		f.deleteOnExit();
+
+		SpilledSaver saver = new SpilledSaver(f, 2);
+		saver.persist(testMap());
+		assertEquals(testMap(), saver.unpersist());
 	}
 }
