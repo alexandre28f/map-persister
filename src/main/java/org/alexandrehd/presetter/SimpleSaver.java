@@ -36,14 +36,20 @@ public class SimpleSaver {
 		}
 	}
 	
-	static public void persist(HashMap<String, ?> map, File f) throws IOException {
+	@SuppressWarnings("unchecked")
+	static public void persistAny(Object obj, File f) throws IOException, IllegalArgumentException {
 		ObjectOutputStream stream = null;
 		
 		try {
-			checkAllTypesOK(map);
+			if (obj instanceof HashMap) {
+				checkAllTypesOK((HashMap<String, ?>) obj);
+			} else if (!allowedTypes.contains(obj.getClass())) {
+				throw new IllegalArgumentException("cannot serialise type: " + obj.getClass());
+			}
+			
 			OutputStream out = new java.io.FileOutputStream(f);
 			stream = new ObjectOutputStream(out);
-			stream.writeObject(map);
+			stream.writeObject(obj);
 		} finally {
 			if (stream != null) {
 				stream.close();
@@ -51,17 +57,24 @@ public class SimpleSaver {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
-	static public HashMap<String, ?> unpersist(File f) throws IOException, ClassNotFoundException {
+	static public void persist(HashMap<String, ?> map, File f) throws IllegalArgumentException, IOException {
+		persistAny(map, f);
+	}
+	
+	static public Object unpersistAny(File f) throws IOException, ClassNotFoundException {
 		ObjectInputStream stream = null;
 		try {
 			InputStream in = new java.io.FileInputStream(f);
 			stream = new ObjectInputStream(in);
-			return (HashMap<String, ?>) stream.readObject();
+			return stream.readObject();
 		} finally {
 			if (stream != null) {
 				stream.close();
 			}
 		}
+	}
+	@SuppressWarnings("unchecked")
+	static public HashMap<String, ?> unpersist(File f) throws IOException, ClassNotFoundException {
+		return (HashMap<String, ?>) unpersistAny(f);
 	}
 }

@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import mi.sys.XManifest;
+
 import org.junit.Test;
 
 public class SimpleSaverTest {
@@ -53,5 +55,15 @@ public class SimpleSaverTest {
 		File f = File.createTempFile("bogosave", ".tmpsaved");
 		f.deleteOnExit();
 		SimpleSaver.persist(m, f);
+	}
+	
+	public void testCanPersistValidBaseType() throws Exception {
+		double d = 4.5;
+		File f = File.createTempFile("bogosave", ".tmpsaved");
+		f.deleteOnExit();
+		SimpleSaver.persistAny(d, f);
+		
+		Double d2 = (Double) SimpleSaver.unpersistAny(f);
+		assertEquals(d, d2.doubleValue(), XManifest.EPSILON);
 	}
 }
