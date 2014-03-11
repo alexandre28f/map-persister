@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import mi.sys.XManifest;
+import kill.sys.XManifest;
 
 import org.junit.Test;
 
