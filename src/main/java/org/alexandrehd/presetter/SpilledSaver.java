@@ -14,6 +14,7 @@ import java.util.HashMap;
 public class SpilledSaver {
 	private int itsDirectoryDepth;
 	private File itsRoot;
+	private File itsDirectoryMarker;
 	
 	/**	The base extension for serialised leaves of the tree. (The directory names are
 	 	left intact.)
@@ -21,9 +22,30 @@ public class SpilledSaver {
 
 	static private final String BASE_EXTENSION = ".ser";
 	
+	static private final String DIR_MARKER = "PRESET_MARKER";
+	
 	public SpilledSaver(File root, int directoryDepth) {
 		itsDirectoryDepth = directoryDepth;
 		itsRoot = root;
+		itsDirectoryMarker = new File(itsRoot, DIR_MARKER);
+	}
+	
+	private void makeRootValid() throws IllegalStateException, IOException {
+		if (itsRoot.isDirectory()) {
+			if (!itsDirectoryMarker.exists()) {
+				throw new IllegalStateException("cannot find marker file: " + itsDirectoryMarker);
+			}
+		} else if (itsRoot.isFile()) {
+			// TODO - write test first!
+		} else {			// Create:
+			if (!itsRoot.mkdir()) {
+				throw new IOException("cannot create directory: " + itsRoot);
+			}
+			
+			if (!itsDirectoryMarker.createNewFile()) {
+				throw new IOException("cannot create marker file: " + itsDirectoryMarker);
+			}
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -31,10 +53,9 @@ public class SpilledSaver {
 		if (itsDirectoryDepth == 0) {
 			SimpleSaver.persist(map, new File(itsRoot.getParent(), itsRoot.getName() + BASE_EXTENSION));
 		} else {
-			if (!itsRoot.mkdir()) {
-				throw new IOException("cannot create directory: " + itsRoot);
-			}
-			
+			// TODO: check for (and remove) flat serialised file if present?
+			makeRootValid();
+
 			for (String k: map.keySet()) {
 				Object v = map.get(k);
 				
@@ -49,13 +70,24 @@ public class SpilledSaver {
 	}
 	
 	public HashMap<String, ?> unpersist() throws ClassNotFoundException, IOException {
-		File serialised = new File(itsRoot.getParent(), itsRoot.getName() + BASE_EXTENSION);
+		File serialisedBase = new File(itsRoot.getParent(), itsRoot.getName() + BASE_EXTENSION);
 
-		// TODO: look for the .ser first, if that fails look for (and explore) the directory.
-		if (serialised.exists()) {
-			return SimpleSaver.unpersist(serialised);
+		// Look for the .ser first, if that fails look for (and explore) the directory.
+		if (serialisedBase.exists()) {
+			return SimpleSaver.unpersist(serialisedBase);
+		} else if (itsRoot.exists()) {
+			if (itsDirectoryMarker.exists()) {
+				return unpersistFromTree(itsRoot);
+			} else {		// No marker: punt!
+				throw new IllegalStateException("directory marker not found: " + itsDirectoryMarker);
+			}
 		} else {
-			throw new FileNotFoundException(serialised.toString());
+			throw new FileNotFoundException(itsRoot.toString());
 		}
+	}
+
+	private HashMap<String, ?> unpersistFromTree(File dir) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

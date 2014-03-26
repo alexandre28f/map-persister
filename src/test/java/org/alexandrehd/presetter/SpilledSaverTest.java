@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashMap;
 
 import kill.sys.XManifest;
@@ -33,13 +34,20 @@ public class SpilledSaverTest {
 		return m2;
 	}
 	
+	private HashMap<String, HashMap<String, Object>> testMap2() {
+		HashMap<String, HashMap<String, Object>> m = testMap();
+		m.get("TOP").remove("B");
+		m.get("TOP").put("X", 419);
+		return m;
+	}
+	
 	@Test(expected=FileNotFoundException.class)
 	public void testThrowsFNF() throws Exception {
-		SpilledSaver saver = new SpilledSaver(folder.newFile("abcde"), 0);
+		SpilledSaver saver = new SpilledSaver(new File(folder.getRoot(), "abcde"), 0);
 		/*ignore*/ saver.unpersist();
 	}
 	
-	@Ignore//(expected=IllegalStateException.class)
+	@Test(expected=IllegalStateException.class)
 	public void cannotUnpersistFromNonSavedDirectory() throws Exception {
 		File f = folder.newFolder("temp");
 		SpilledSaver saver = new SpilledSaver(f, 0);
@@ -108,7 +116,7 @@ public class SpilledSaverTest {
 		assertEquals(testMap(), saver.unpersist());
 	}
 	
-	@Ignore
+	@Test
 	public void testCanUnpersistNested() throws Exception {
 		File f = new File(folder.getRoot(), "a");
 		SpilledSaver saver = new SpilledSaver(f, 2);
@@ -116,7 +124,20 @@ public class SpilledSaverTest {
 		assertEquals(testMap(), saver.unpersist());
 	}
 	
-	@Ignore
+	@Test
+	public void willRemoveFlatSaveOnNestedSave() throws Exception {
+		File f = new File(folder.getRoot(), "a");
+		SpilledSaver saver = new SpilledSaver(f, 0);
+		saver.persist(testMap());
+
+		saver = new SpilledSaver(f, 2);
+		saver.persist(testMap2());
+		
+		assertEquals(testMap2(), saver.unpersist());
+		
+	}
+	
+	@Test
 	public void canPersistIntoExistingPersistedDirectory() throws Exception {
 		File f = new File(folder.getRoot(), "a");
 		SpilledSaver saver = new SpilledSaver(f, 2);
@@ -124,7 +145,7 @@ public class SpilledSaverTest {
 		saver.persist(testMap());
 	}
 	
-	@Ignore//(expected=IllegalStateException.class)
+	@Test(expected=IllegalStateException.class)
 	public void willNotPersistIntoNonPresetDirectory() throws Exception {
 		File f = new File(folder.getRoot(), "a");
 		f.mkdir();		//	If the directory is created by other machinery (or manually),
