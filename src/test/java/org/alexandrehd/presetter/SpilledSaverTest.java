@@ -116,7 +116,7 @@ public class SpilledSaverTest {
 		assertEquals(testMap(), saver.unpersist());
 	}
 	
-	@Test
+	@Ignore
 	public void testCanUnpersistNested() throws Exception {
 		File f = new File(folder.getRoot(), "a");
 		SpilledSaver saver = new SpilledSaver(f, 2);
@@ -124,7 +124,7 @@ public class SpilledSaverTest {
 		assertEquals(testMap(), saver.unpersist());
 	}
 	
-	@Test
+	@Ignore
 	public void willRemoveFlatSaveOnNestedSave() throws Exception {
 		File f = new File(folder.getRoot(), "a");
 		SpilledSaver saver = new SpilledSaver(f, 0);
