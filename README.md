@@ -22,3 +22,28 @@ Here's how the unit tests are currently shaking down:
 - We'll allow arbitrary characters in (string) keys - if we were to slug them, there would be no reliable mapping back into memory. We'll escape what we regard as illegal characters, URL-style.
 
 - The jury is out regarding timestamps on files (or, put another way, not overwriting files representing entries which have not changed). The brute force method is to re-import and equality-test everything we're exporting; a slightly neater way is probably to "attach" the layered persister object to a location, and have it keep a clone of the original map, so that it can do a delta on save. (This could be the fall-back for a persister that's created on the fly - it re-reads to a notional cloned map, then saves according to delta analysis.)
+
+## Operation
+
+We want to write a nested hashmap `M_new`, at folder depth `D`, to a location which we assume contains a representation (to some arbitrary depth) of hashmap `M_old`.
+
+```
+function write(M\_new, M\_old, location, D):
+        for all keys k in M_old which are not in M_new:
+                erase from file system (directory or flat file) at location/k
+                
+        for all keys k in M_new which are not in M_old:
+                create structure (directory or flat file) at location/k according to depth D
+                
+        for all keys k in both M_old and M_new:
+                let obj_old = M_old[k] and obj_new = M_new[k]
+
+                structurally compare obj_old and obj_new
+                
+                if not (obj_old equals obj_new):        // Need to replace tree here.
+                        if obj_old is map and location/k is dir and obj_new is map and D > 0:
+                                RECURSE(obj_new[k], obj_old[k], location/k, D-1)
+                        else:
+                                erase at location/k
+                                create structure for obj_new at location/k depth D
+```
