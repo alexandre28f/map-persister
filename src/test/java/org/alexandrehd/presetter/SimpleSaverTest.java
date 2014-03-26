@@ -3,6 +3,7 @@ package org.alexandrehd.presetter;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
@@ -33,6 +34,11 @@ public class SimpleSaverTest {
 		File f = File.createTempFile("bogosave", ".tmpsaved");
 		f.deleteOnExit();
 		SimpleSaver.persist((HashMap<String, ?>) m, f);
+	}
+	
+	@Test(expected=FileNotFoundException.class)
+	public void testThrowsFNF() throws Exception {
+		/*ignore*/ SimpleSaver.unpersistAny(new File("/foo/bar/baz/bonk"));
 	}
 	
 	static class Fooble<T> extends HashMap<String, T> {

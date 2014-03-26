@@ -1,15 +1,24 @@
 package org.alexandrehd.presetter;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
-import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 
+import kill.sys.XManifest;
+
 import org.junit.Ignore;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 public class SpilledSaverTest {
+	//	Sweet: http://junit.org/javadoc/4.9/org/junit/rules/TemporaryFolder.html
+    @Rule
+    public TemporaryFolder folder = new TemporaryFolder();
+
 	private HashMap<String, HashMap<String, Object>> testMap() {
 		HashMap<String, Object> m = new HashMap<String, Object>();
 		m.put("A", 1.0);
@@ -23,12 +32,24 @@ public class SpilledSaverTest {
 		
 		return m2;
 	}
+	
+	@Test(expected=FileNotFoundException.class)
+	public void testThrowsFNF() throws Exception {
+		SpilledSaver saver = new SpilledSaver(folder.newFile("abcde"), 0);
+		/*ignore*/ saver.unpersist();
+	}
+	
+	@Ignore//(expected=IllegalStateException.class)
+	public void cannotUnpersistFromNonSavedDirectory() throws Exception {
+		File f = folder.newFolder("temp");
+		SpilledSaver saver = new SpilledSaver(f, 0);
+		/*ignore*/ saver.unpersist();	
+	}
+
 
 	@Test
 	public void testWorksWithNoNesting() throws Exception {
-		File f = File.createTempFile("bogosave", ".tmpsaved");
-		f.deleteOnExit();
-		
+		File f = folder.newFile("abcde");
 		SpilledSaver saver = new SpilledSaver(f, 0);
 		
 		saver.persist(testMap());
@@ -38,9 +59,8 @@ public class SpilledSaverTest {
 	}
 	
 	@Test
-	public void testWorksWithSingleLevelNesting() throws Exception {
-		File f = File.createTempFile("bogosave", ".tmpsaved");
-		f.delete();
+	public void persistsWithSingleLevelNesting() throws Exception {
+		File f = new File(folder.getRoot(), "temp2");
 		
 		SpilledSaver saver = new SpilledSaver(f, 1);
 		
@@ -50,12 +70,16 @@ public class SpilledSaverTest {
 		
 		File ser = new File(f, "TOP.ser");
 		assertTrue("serialised file exists", ser.isFile());
+		
+		assertEquals(3.0,
+					 ((Double) SimpleSaver.unpersist(ser).get("C")).doubleValue(),
+					 XManifest.EPSILON
+					);
 	}
 
 	@Test
-	public void testWorksWithDoubleLevelNesting() throws Exception {
-		File f = File.createTempFile("bogosave", ".tmpsaved");
-		f.delete();
+	public void persistsWithDoubleLevelNesting() throws Exception {
+		File f = new File(folder.getRoot(), "temp2");
 		
 		SpilledSaver saver = new SpilledSaver(f, 2);
 		
@@ -66,14 +90,18 @@ public class SpilledSaverTest {
 		File d = new File(f, "TOP");
 		assertTrue("serialised file exists", d.isDirectory());
 
-		File ser = new File(d, "A.ser");
+		File ser = new File(d, "C.ser");
 		assertTrue("serialised file exists", ser.isFile());
+
+		assertEquals(3.0,
+				     ((Double) SimpleSaver.unpersistAny(ser)).doubleValue(),
+				     XManifest.EPSILON
+				    );
 	}
 	
 	@Test
 	public void testCanUnpersistUnnested() throws Exception {
-		File f = File.createTempFile("bogosave", ".tmpsaved");
-		f.deleteOnExit();
+		File f = new File(folder.getRoot(), "temp2");
 
 		SpilledSaver saver = new SpilledSaver(f, 0);
 		saver.persist(testMap());
@@ -82,11 +110,27 @@ public class SpilledSaverTest {
 	
 	@Ignore
 	public void testCanUnpersistNested() throws Exception {
-		File f = File.createTempFile("bogosave", ".tmpsaved");
-		f.deleteOnExit();
-
+		File f = new File(folder.getRoot(), "a");
 		SpilledSaver saver = new SpilledSaver(f, 2);
 		saver.persist(testMap());
 		assertEquals(testMap(), saver.unpersist());
+	}
+	
+	@Ignore
+	public void canPersistIntoExistingPersistedDirectory() throws Exception {
+		File f = new File(folder.getRoot(), "a");
+		SpilledSaver saver = new SpilledSaver(f, 2);
+		saver.persist(testMap());
+		saver.persist(testMap());
+	}
+	
+	@Ignore//(expected=IllegalStateException.class)
+	public void willNotPersistIntoNonPresetDirectory() throws Exception {
+		File f = new File(folder.getRoot(), "a");
+		f.mkdir();		//	If the directory is created by other machinery (or manually),
+						//	we should reject the persist() attempt.
+		
+		SpilledSaver saver = new SpilledSaver(f, 2);
+		saver.persist(testMap());
 	}
 }
