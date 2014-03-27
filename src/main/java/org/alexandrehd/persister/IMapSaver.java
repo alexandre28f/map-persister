@@ -1,6 +1,6 @@
 package org.alexandrehd.persister;
 
-import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 
 /**	An interface for writing a map to a location, either as a flat file
@@ -11,5 +11,5 @@ import java.util.HashMap;
  */
 
 public interface IMapSaver {
-	void saveToLocation(HashMap<String, ?> item, File location, int depth);
+	void saveToRoot(HashMap<String, ?> item, int depth) throws IOException;
 }

@@ -2,15 +2,17 @@ package org.alexandrehd.persister;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-public class SimpleSaver {
+public class MapSaver extends MapIO implements IMapSaver {
+	public MapSaver(File root) {
+		super(root);
+	}
+
 	static final Set<Class<?>> allowedTypes;
 	
 	//	Set up the kinds of object we allow in our maps (we also allow nested maps):
@@ -36,9 +38,15 @@ public class SimpleSaver {
 			}
 		}
 	}
-	
+
+	@Override
+	public void saveToRoot(HashMap<String, ?> item, int depth) throws IOException {
+		// Flat save only (for now):
+		saveAnyToRoot(item);
+	}
+
 	@SuppressWarnings("unchecked")
-	static /*package*/ void persistAny(Object obj, File f) throws IOException, IllegalArgumentException {
+	/*package*/ void saveAnyToRoot(Object obj) throws IOException {
 		ObjectOutputStream stream = null;
 		
 		try {
@@ -48,7 +56,7 @@ public class SimpleSaver {
 				throw new IllegalArgumentException("cannot serialise type: " + obj.getClass());
 			}
 			
-			OutputStream out = new java.io.FileOutputStream(f);
+			OutputStream out = new java.io.FileOutputStream(getFlatName());
 			stream = new ObjectOutputStream(out);
 			stream.writeObject(obj);
 		} finally {
@@ -56,31 +64,5 @@ public class SimpleSaver {
 				stream.close();
 			}
 		}
-	}
-	
-	static public void persist(HashMap<String, ?> map, File f)
-		throws IllegalArgumentException, IOException
-	{
-		persistAny(map, f);
-	}
-	
-	static /*package*/ Object unpersistAny(File f) throws IOException, ClassNotFoundException {
-		ObjectInputStream stream = null;
-		try {
-			InputStream in = new java.io.FileInputStream(f);
-			stream = new ObjectInputStream(in);
-			return stream.readObject();
-		} finally {
-			if (stream != null) {
-				stream.close();
-			}
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	static public HashMap<String, ?> unpersist(File f)
-		throws IOException, ClassNotFoundException
-	{
-		return (HashMap<String, ?>) unpersistAny(f);
 	}
 }
