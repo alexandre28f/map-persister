@@ -41,7 +41,7 @@ function write(M_new, M_old, location, D):
                 structurally compare obj_old and obj_new
                 
                 if not (obj_old equals obj_new):        // Need to replace tree here.
-                        if obj_old is map and location/k is dir and obj_new is map and D > 0:
+                        if location/k is dir {implies obj_old is map} and obj_new is map and D > 0:
                                 RECURSE(obj_new[k], obj_old[k], location/k, D-1)
                         else:
                                 erase at location/k

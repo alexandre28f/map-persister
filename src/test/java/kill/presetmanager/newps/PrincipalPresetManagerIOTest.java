@@ -14,7 +14,7 @@ import kill.presetmanager.newps.PrincipalPresetManager;
 import kill.presetmanager.newps.PrincipalPresetManagerIO;
 import kill.util.IFileUtils;
 
-import org.alexandrehd.presetter.legacy.ScalarParam;
+import org.alexandrehd.persister.legacy.ScalarParam;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;

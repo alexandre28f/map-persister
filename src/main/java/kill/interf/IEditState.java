@@ -7,8 +7,8 @@ import kill.interf.newps.IDeepCloneable;
 import kill.presetmanager.newps.json.EditBufferState;
 import kill.util.IPrettyPrintable;
 
-import org.alexandrehd.presetter.legacy.ScalarParam;
-import org.alexandrehd.presetter.legacy.VectorParam;
+import org.alexandrehd.persister.legacy.ScalarParam;
+import org.alexandrehd.persister.legacy.VectorParam;
 
 /**	An IEditState is a read-only edit buffer-style snapshot. The IEditBuffer
 	subclass actually allows parameters to be altered. IEditStates are the

@@ -20,7 +20,7 @@ import kill.util.Cloner;
 import kill.util.IMultiLinePrinter;
 import kill.util.TestingManifest;
 
-import org.alexandrehd.presetter.legacy.VectorParam;
+import org.alexandrehd.persister.legacy.VectorParam;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;

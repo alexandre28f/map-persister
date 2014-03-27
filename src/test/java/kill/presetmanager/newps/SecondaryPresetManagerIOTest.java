@@ -19,7 +19,7 @@ import kill.util.IFileUtils;
 import kill.util.TestingManifest;
 import kill.util.VariousUtils;
 
-import org.alexandrehd.presetter.legacy.ScalarParam;
+import org.alexandrehd.persister.legacy.ScalarParam;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;

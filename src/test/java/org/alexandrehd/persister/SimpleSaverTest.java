@@ -1,4 +1,4 @@
-package org.alexandrehd.presetter;
+package org.alexandrehd.persister;
 
 import static org.junit.Assert.*;
 
@@ -11,6 +11,7 @@ import java.util.Map;
 
 import kill.sys.XManifest;
 
+import org.alexandrehd.persister.SimpleSaver;
 import org.junit.Test;
 
 public class SimpleSaverTest {

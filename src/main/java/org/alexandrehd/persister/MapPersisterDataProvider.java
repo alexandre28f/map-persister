@@ -3,14 +3,14 @@
  *
  * Feb 27, 2014 
  */
-package org.alexandrehd.presetter;
+package org.alexandrehd.persister;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * An interface for classes that provide and consume 
- * persistence safe maps as allowed by {@link org.alexandrehd.presetter.SimpleSaver}. 
+ * persistence safe maps as allowed by {@link org.alexandrehd.persister.SimpleSaver}. 
  *
  * @author Roth Michaels 
  * (<i><a href="mailto:roth@rothmichaels.us">roth@rothmichaels.us</a></i>)

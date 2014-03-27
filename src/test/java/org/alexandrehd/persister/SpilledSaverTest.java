@@ -1,4 +1,4 @@
-package org.alexandrehd.presetter;
+package org.alexandrehd.persister;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -10,6 +10,8 @@ import java.util.HashMap;
 
 import kill.sys.XManifest;
 
+import org.alexandrehd.persister.SimpleSaver;
+import org.alexandrehd.persister.SpilledSaver;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
@@ -42,7 +44,7 @@ public class SpilledSaverTest {
 	}
 	
 	@Test(expected=FileNotFoundException.class)
-	public void testThrowsFNF() throws Exception {
+	public void throwsFileNotFound() throws Exception {
 		SpilledSaver saver = new SpilledSaver(new File(folder.getRoot(), "abcde"), 0);
 		/*ignore*/ saver.unpersist();
 	}
@@ -53,7 +55,6 @@ public class SpilledSaverTest {
 		SpilledSaver saver = new SpilledSaver(f, 0);
 		/*ignore*/ saver.unpersist();	
 	}
-
 
 	@Test
 	public void testWorksWithNoNesting() throws Exception {

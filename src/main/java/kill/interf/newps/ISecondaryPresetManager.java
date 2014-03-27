@@ -4,7 +4,7 @@ import kill.interf.IEditState;
 import kill.interf.flow.ISequencerListener;
 import kill.util.IPrettyPrintable;
 
-import org.alexandrehd.presetter.legacy.VectorParam;
+import org.alexandrehd.persister.legacy.VectorParam;
 
 public interface ISecondaryPresetManager extends IPresetManager,
 												 IPresetFrame<IEditState>,

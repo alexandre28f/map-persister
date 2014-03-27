@@ -12,7 +12,7 @@ import kill.interf.newps.ISecondaryPresetManager;
 import kill.presetmanager.TransientPresetTemplate;
 import kill.util.IMultiLinePrinter;
 
-import org.alexandrehd.presetter.legacy.VectorParam;
+import org.alexandrehd.persister.legacy.VectorParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

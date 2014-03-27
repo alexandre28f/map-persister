@@ -8,8 +8,8 @@ import kill.presetmanager.EditBuffer;
 import kill.presetmanager.newps.PrincipalPreset;
 import kill.util.TestingManifest;
 
-import org.alexandrehd.presetter.legacy.ScalarParam;
-import org.alexandrehd.presetter.legacy.VectorParam;
+import org.alexandrehd.persister.legacy.ScalarParam;
+import org.alexandrehd.persister.legacy.VectorParam;
 import org.junit.Ignore;
 import org.junit.Test;
 

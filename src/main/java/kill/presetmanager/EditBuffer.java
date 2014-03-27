@@ -4,8 +4,8 @@ import kill.interf.IEditState;
 import kill.presetmanager.newps.json.EditBufferState;
 import kill.util.IMultiLinePrinter;
 
-import org.alexandrehd.presetter.legacy.ScalarParam;
-import org.alexandrehd.presetter.legacy.VectorParam;
+import org.alexandrehd.persister.legacy.ScalarParam;
+import org.alexandrehd.persister.legacy.VectorParam;
 
 public class EditBuffer extends PresetState implements IEditBuffer
 {
