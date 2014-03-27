@@ -2,7 +2,7 @@
 
 # `map-persister`
 
-- `cassiel` [![Build Status](https://secure.travis-ci.org/cassiel/map-persister.png)](http://travis-ci.org/cassiel/map-persister)
+- `cassiel` [![Build Status](https://secure.travis-ci.org/cassiel/map-persister.png)](http://travis-ci.org/cassiel/map-persister)  [![Dependency Status](https://www.versioneye.com/user/projects/5334011a7bae4b6ef20006a1/badge.png)](https://www.versioneye.com/user/projects/5334011a7bae4b6ef20006a1)
 - `alexandre28f` [![Build Status](https://secure.travis-ci.org/alexandre28f/map-persister.png)](http://travis-ci.org/alexandre28f/map-persister)
 
 ## Thoughts
