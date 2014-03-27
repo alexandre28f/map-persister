@@ -1,11 +1,13 @@
 package org.alexandrehd.persister;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class MapSaver extends MapIO implements IMapSaver {
@@ -38,15 +40,61 @@ public class MapSaver extends MapIO implements IMapSaver {
 			}
 		}
 	}
+	
+	private void saveNode(Object obj, int depth) throws IOException {
+		if (depth == 0) {
+			saveObjectToRoot(obj);
+		} else if (obj.getClass() == HashMap.class) {
+			File root = getRootFile();
+			if (!root.mkdir()) { throw new IOException("could not create directory " + root); }
+
+			@SuppressWarnings("unchecked")
+			HashMap<String, ?> m = (HashMap<String, ?>) obj;
+
+			for (Map.Entry<String, ?> e: m.entrySet()) {
+				String key = e.getKey();
+				MapSaver saver = new MapSaver(new File(getRootFile(), key));
+				saver.saveNode(e.getValue(), depth - 1);
+			}
+		} else {
+			saveObjectToRoot(obj);
+		}
+		
+	}
+
+	/** Save an item after sanity check (and after removing anything currently in
+	 	the save location).
+	 	
+	 	@see org.alexandrehd.persister.IMapSaver#saveToRoot(java.util.HashMap, int)
+	 */
 
 	@Override
 	public void saveToRoot(HashMap<String, ?> item, int depth) throws IOException {
-		// Flat save only (for now):
-		saveAnyToRoot(item);
+		checkAllTypesOK(item);
+		deleteRoot();
+		saveNode(item, depth);
+	}
+
+    public static boolean deleteRecursive(File path) throws FileNotFoundException {
+        if (!path.exists()) throw new FileNotFoundException(path.getAbsolutePath());
+        boolean ret = true;
+        if (path.isDirectory()) {
+            for (File f : path.listFiles()) {
+                ret = ret && deleteRecursive(f);
+            }
+        }
+        return ret && path.delete();
+    }
+    
+    private void deleteRoot() throws FileNotFoundException {
+		getFlatFile().delete();
+		
+		File r = getRootFile();
+		if (r.exists()) {  deleteRecursive(r); }
 	}
 
 	@SuppressWarnings("unchecked")
-	/*package*/ void saveAnyToRoot(Object obj) throws IOException {
+	/*package*/ void saveObjectToRoot(Object obj) throws IOException {
 		ObjectOutputStream stream = null;
 		
 		try {
@@ -56,7 +104,7 @@ public class MapSaver extends MapIO implements IMapSaver {
 				throw new IllegalArgumentException("cannot serialise type: " + obj.getClass());
 			}
 			
-			OutputStream out = new java.io.FileOutputStream(getFlatName());
+			OutputStream out = new java.io.FileOutputStream(getFlatFile());
 			stream = new ObjectOutputStream(out);
 			stream.writeObject(obj);
 		} finally {

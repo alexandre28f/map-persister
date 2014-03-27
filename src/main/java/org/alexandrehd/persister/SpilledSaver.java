@@ -11,6 +11,7 @@ import java.util.HashMap;
  	@author nick
  */
 
+@Deprecated
 public class SpilledSaver {
 	private int itsDirectoryDepth;
 	private File itsRoot;

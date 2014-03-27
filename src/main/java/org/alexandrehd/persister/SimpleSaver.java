@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+@Deprecated
 public class SimpleSaver {
 	static final Set<Class<?>> allowedTypes;
 	

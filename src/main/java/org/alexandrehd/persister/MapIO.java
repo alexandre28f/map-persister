@@ -13,14 +13,14 @@ public class MapIO {
 	
 	protected MapIO(File root) {
 		itsRoot = root;
-		itsFlatName = new File(root.getParent(), root.getName() + ".ser");
+		itsFlatName = new File(root.getParentFile(), root.getName() + ".ser");
 	}
 
-	protected File getRootName() {
+	protected File getRootFile() {
 		return itsRoot;
 	}
 
-	protected File getFlatName() {
+	protected File getFlatFile() {
 		return itsFlatName;
 	}
 }
