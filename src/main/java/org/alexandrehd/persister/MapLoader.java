@@ -23,9 +23,10 @@ public class MapLoader extends MapIO implements IMapLoader {
 				HashMap<String, Object> result = new HashMap<String, Object>();
 				
 				for (File f: contents) {
-					// This is a bit scrappy: we might hit both FOO and FOO.ser, in which case
-					// we'll process FOO twice and get FOO.ser each time (as preference).
-					//	TODO: pull out as strings, use a set.
+					//	This is a bit scrappy: we might hit both FOO and FOO.ser, in which case
+					//	we'll process FOO twice and get FOO.ser each time (as preference).
+					//	We don't care that much since it should never happen in a well-formed
+					//	saved directory.
 					String n = f.getName();
 					n = n.replaceAll("\\.ser$", "");
 					//	TODO: sanitise names!

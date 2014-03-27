@@ -63,19 +63,22 @@ public class MapSaver extends MapIO implements IMapSaver {
 	}
 
 	/** Save an item after sanity check (and after removing anything currently in
-	 	the save location).
+	 	the save location). NB: this method *deletes the old root* before writing
+	 	the data.
 	 	
 	 	@see org.alexandrehd.persister.IMapSaver#saveToRoot(java.util.HashMap, int)
 	 */
 
 	@Override
 	public void saveToRoot(HashMap<String, ?> item, int depth) throws IOException {
+		//	TODO this check should be lifted into the main delta-based persister
+		//	(once we've written it).
 		checkAllTypesOK(item);
 		deleteRoot();
 		saveNode(item, depth);
 	}
 
-    public static boolean deleteRecursive(File path) throws FileNotFoundException {
+    private static boolean deleteRecursive(File path) throws FileNotFoundException {
         if (!path.exists()) throw new FileNotFoundException(path.getAbsolutePath());
         boolean ret = true;
         if (path.isDirectory()) {
