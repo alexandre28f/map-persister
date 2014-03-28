@@ -27,6 +27,8 @@ Here's how the unit tests are currently shaking down:
 
 We want to write a nested hashmap `M_new`, at folder depth `D`, to a location which we assume contains a representation (to some arbitrary depth) of hashmap `M_old`.
 
+Initial pseudocode (here for historical reasons). For the actual code, look at `persistMap()` and `persistNode()` in `[MapPersister](src/main/java/org/alexandrehd/persister/MapPersister.java)`.
+
 ```
 function write(M_new, M_old, location, D):
         for all keys k in M_old which are not in M_new:
