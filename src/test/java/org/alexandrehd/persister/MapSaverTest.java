@@ -58,7 +58,7 @@ public class MapSaverTest {
 		
 		File f = folder.newFile();
 		
-		new MapSaver(f).saveToRoot((HashMap<String, ?>) m, 0);
+		new MapSaver(f).saveNode((HashMap<String, ?>) m, 0);
 		assertEquals(m, new MapLoader(f).loadFromRoot());
 	}
 	
@@ -67,8 +67,7 @@ public class MapSaverTest {
 		HashMap<String, HashMap<String, Object>> m = testMap();
 		File f = folder.newFolder();
 		File root = new File(f, "ROOT");
-		assertTrue(root.mkdir());
-		new MapSaver(root).saveToRoot(m, 1);
+		new MapSaver(root).saveNode(m, 1);
 		
 		assertTrue(root.isDirectory());
 		assertTrue(new File(root, "TOP.ser").isFile());		
@@ -81,19 +80,7 @@ public class MapSaverTest {
 		
 		HashMap<String, HashMap<String, Object>> m = testMap();
 
-		new MapSaver(root).saveToRoot((HashMap<String, ?>) m, 99);
+		new MapSaver(root).saveNode((HashMap<String, ?>) m, 99);
 		assertEquals(m, new MapLoader(root).loadFromRoot());
-	}
-	
-	@Test
-	public void savingTreeDeletesFlatFile() throws Exception {
-		HashMap<String, HashMap<String, Object>> m = testMap();
-		File f = folder.newFolder();
-		File root = new File(f, "ROOT");
-		File ser = new File(f, "ROOT.ser");
-		assertTrue(ser.createNewFile());
-		
-		new MapSaver(root).saveToRoot(m, 1);
-		assertFalse(ser.exists());
 	}
 }

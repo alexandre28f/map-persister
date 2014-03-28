@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.alexandrehd.persister.util.Cloner;
@@ -18,6 +19,32 @@ public class MapPersister extends MapIO {
 		itsSnapshot = null;
 	}
 	
+	static final Set<Class<?>> allowedTypes;
+	
+	//	Set up the kinds of object we allow in our maps (we also allow nested maps):
+	static {
+		allowedTypes = new HashSet<Class<?>>();
+		allowedTypes.add(Double.class);
+		allowedTypes.add(double[].class);
+		allowedTypes.add(double[][].class);
+		allowedTypes.add(String.class);
+	}
+	
+	@SuppressWarnings("unchecked")
+	static private void checkAllTypesOK(HashMap<String, ?> map) throws IllegalArgumentException {
+		if (map.getClass() != HashMap.class) {
+			throw new IllegalArgumentException("cannot serialise type " + map.getClass());
+		}
+		
+		for (Object o: map.values()) {
+			if (o.getClass() == HashMap.class) {
+				checkAllTypesOK((HashMap<String, ?>) o);
+			} else if (!allowedTypes.contains(o.getClass())) {
+				throw new IllegalArgumentException("cannot serialise type " + o.getClass());
+			}
+		}
+	}
+	
 	/**	Persist a map. This will be saved incrementally by reference to the
 	 	map we originally read (if any; if not, we'll attempt a read before
 	 	saving).
@@ -28,17 +55,20 @@ public class MapPersister extends MapIO {
 	 		don't allow to be serialised
 	 		
 	 	@throws IOException
-	 * @throws ClassNotFoundException 
+	 	@throws ClassNotFoundException 
 	 */
 	
 	public void persist(HashMap<String, ?> map)
 		throws IllegalArgumentException, IOException, ClassNotFoundException
 	{
+		checkAllTypesOK(map);
+		
 		if (itsSnapshot == null) {
 			try { /*ignore*/ unpersist(); } catch (IOException _) { }
 		}
 		
 		persistNode(itsSnapshot, map, getRootPath(), itsDepth);
+		itsSnapshot = new Cloner<HashMap<String, ?>>().deepCopy(map);
 	}
 	
 	private void persistMap(HashMap<String, ?> oldMap,
@@ -73,6 +103,7 @@ public class MapPersister extends MapIO {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	private void persistNode(Object oldObj,
 							 Object newObj,
 							 File location,
@@ -106,7 +137,6 @@ public class MapPersister extends MapIO {
 	 	@throws ClassNotFoundException
 	 */
 	
-	@SuppressWarnings("unchecked")
 	public HashMap<String, ?> unpersist()
 		throws IOException, ClassNotFoundException
 	{

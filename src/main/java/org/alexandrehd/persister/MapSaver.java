@@ -25,33 +25,6 @@ class MapSaver extends MapIO {
 		super(root);
 	}
 
-	/* TODO: this functionality should move to the delta-based saver. */
-	static final Set<Class<?>> allowedTypes;
-	
-	//	Set up the kinds of object we allow in our maps (we also allow nested maps):
-	static {
-		allowedTypes = new HashSet<Class<?>>();
-		allowedTypes.add(Double.class);
-		allowedTypes.add(double[].class);
-		allowedTypes.add(double[][].class);
-		allowedTypes.add(String.class);
-	}
-	
-	@SuppressWarnings("unchecked")
-	static private void checkAllTypesOK(HashMap<String, ?> map) throws IllegalArgumentException {
-		if (map.getClass() != HashMap.class) {
-			throw new IllegalArgumentException("cannot serialise type " + map.getClass());
-		}
-		
-		for (Object o: map.values()) {
-			if (o.getClass() == HashMap.class) {
-				checkAllTypesOK((HashMap<String, ?>) o);
-			} else if (!allowedTypes.contains(o.getClass())) {
-				throw new IllegalArgumentException("cannot serialise type " + o.getClass());
-			}
-		}
-	}
-	
 	/*package*/ void saveNode(Object obj, int depth) throws IOException {
 		if (depth == 0) {
 			saveObjectToRoot(obj);
@@ -71,23 +44,6 @@ class MapSaver extends MapIO {
 			saveObjectToRoot(obj);
 		}
 		
-	}
-
-	/** Save an item after sanity check (and after removing anything currently in
-	 	the save location). NB: this method *deletes the old root* before writing
-	 	the data.
-	 	
-	 	@see org.alexandrehd.persister.IMapSaver#saveToRoot(java.util.HashMap, int)
-	 */
-
-	//@Override
-	@Deprecated
-	void saveToRoot(HashMap<String, ?> item, int depth) throws IOException {
-		//	TODO this check should be lifted into the main delta-based persister
-		//	(once we've written it).
-		checkAllTypesOK(item);
-		deleteRoot();
-		saveNode(item, depth);
 	}
 
     private static boolean deleteRecursive(File path) throws FileNotFoundException {
@@ -113,12 +69,6 @@ class MapSaver extends MapIO {
 		ObjectOutputStream stream = null;
 		
 		try {
-			if (obj instanceof HashMap) {
-				checkAllTypesOK((HashMap<String, ?>) obj);
-			} else if (!allowedTypes.contains(obj.getClass())) {
-				throw new IllegalArgumentException("cannot serialise type: " + obj.getClass());
-			}
-			
 			OutputStream out = new java.io.FileOutputStream(getFlatFile());
 			stream = new ObjectOutputStream(out);
 			stream.writeObject(obj);

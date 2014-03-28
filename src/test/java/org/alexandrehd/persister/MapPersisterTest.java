@@ -74,8 +74,10 @@ public class MapPersisterTest {
 		File ser = new File(f, "TOP.ser");
 		assertTrue("serialised file exists", ser.isFile());
 		
+		@SuppressWarnings("unchecked")
+		HashMap<String, ?> x = (HashMap<String, ?>) new MapPersister(f, 0).unpersist().get("TOP");
 		assertEquals(3.0,
-					 ((Double) new MapPersister(f, 0).unpersist().get("C")).doubleValue(),
+					 ((Double) x.get("C")).doubleValue(),
 					 XManifest.EPSILON
 					);
 	}
@@ -145,6 +147,8 @@ public class MapPersisterTest {
 		long mod1 = f2.lastModified();
 		assertTrue("expecting serialised file", mod1 != 0L);
 		
+		//	This only works because we have a snapshot inside `saver`, so won't
+		//	try to import first (and trip over _tmp_):
 		File f3 = new File(f, "_tmp_");
 		f3.createNewFile();
 
