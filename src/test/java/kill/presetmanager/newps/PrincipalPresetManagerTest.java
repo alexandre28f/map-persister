@@ -20,10 +20,10 @@ import kill.presetmanager.newps.PresetFrame;
 import kill.presetmanager.newps.PrincipalPresetManager;
 import kill.presetmanager.newps.SecondaryPresetManager;
 import kill.sys.XManifest;
-import kill.util.Cloner;
 import kill.util.IMultiLinePrinter;
 import kill.util.TestingManifest;
 
+import org.alexandrehd.persister.util.Cloner;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;

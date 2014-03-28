@@ -6,7 +6,7 @@ import kill.presetmanager.newps.MultiStateZone;
 import kill.presetmanager.newps.ScaledZone;
 import kill.util.TestingManifest;
 
-import org.alexandrehd.presetter.legacy.ScalarParam;
+import org.alexandrehd.persister.legacy.ScalarParam;
 import org.junit.Test;
 
 public class ScaledZoneTest {

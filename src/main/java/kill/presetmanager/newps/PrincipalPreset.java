@@ -10,11 +10,11 @@ import kill.m.dispatch.INonZoneableCollector;
 import kill.presetmanager.EditBuffer;
 import kill.presetmanager.newps.json.PanelPresetState;
 import kill.sys.XManifest;
-import kill.util.Cloner;
 import kill.util.IMultiLinePrinter;
 import kill.util.PrettyPrintBuffer;
 import kill.util.PrintStamp;
 
+import org.alexandrehd.persister.util.Cloner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

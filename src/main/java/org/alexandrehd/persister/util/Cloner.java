@@ -1,4 +1,4 @@
-package kill.util;
+package org.alexandrehd.persister.util;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

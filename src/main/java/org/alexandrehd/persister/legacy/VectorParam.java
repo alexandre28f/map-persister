@@ -1,4 +1,4 @@
-package org.alexandrehd.presetter.legacy;
+package org.alexandrehd.persister.legacy;
 
 import java.io.Serializable;
 

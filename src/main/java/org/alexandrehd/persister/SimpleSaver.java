@@ -1,4 +1,4 @@
-package org.alexandrehd.presetter;
+package org.alexandrehd.persister;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,9 +10,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+@Deprecated
 public class SimpleSaver {
 	static final Set<Class<?>> allowedTypes;
 	
+	//	Set up the kinds of object we allow in our maps (we also allow nested maps):
 	static {
 		allowedTypes = new HashSet<Class<?>>();
 		allowedTypes.add(Double.class);
@@ -37,7 +39,7 @@ public class SimpleSaver {
 	}
 	
 	@SuppressWarnings("unchecked")
-	static public void persistAny(Object obj, File f) throws IOException, IllegalArgumentException {
+	static /*package*/ void persistAny(Object obj, File f) throws IOException, IllegalArgumentException {
 		ObjectOutputStream stream = null;
 		
 		try {
@@ -57,11 +59,13 @@ public class SimpleSaver {
 		}
 	}
 	
-	static public void persist(HashMap<String, ?> map, File f) throws IllegalArgumentException, IOException {
+	static public void persist(HashMap<String, ?> map, File f)
+		throws IllegalArgumentException, IOException
+	{
 		persistAny(map, f);
 	}
 	
-	static public Object unpersistAny(File f) throws IOException, ClassNotFoundException {
+	static /*package*/ Object unpersistAny(File f) throws IOException, ClassNotFoundException {
 		ObjectInputStream stream = null;
 		try {
 			InputStream in = new java.io.FileInputStream(f);
@@ -73,8 +77,11 @@ public class SimpleSaver {
 			}
 		}
 	}
+
 	@SuppressWarnings("unchecked")
-	static public HashMap<String, ?> unpersist(File f) throws IOException, ClassNotFoundException {
+	static public HashMap<String, ?> unpersist(File f)
+		throws IOException, ClassNotFoundException
+	{
 		return (HashMap<String, ?>) unpersistAny(f);
 	}
 }

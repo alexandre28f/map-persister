@@ -8,7 +8,7 @@ import kill.presetmanager.newps.MultiStateZone;
 import kill.presetmanager.newps.SingleStateZone;
 import kill.util.TestingManifest;
 
-import org.alexandrehd.presetter.legacy.VectorParam;
+import org.alexandrehd.persister.legacy.VectorParam;
 import org.junit.Test;
 
 public class SingleStateZoneTest {
