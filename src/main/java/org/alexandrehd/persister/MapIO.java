@@ -8,7 +8,7 @@ import java.io.File;
  */
 
 public class MapIO {
-	private File itsRoot;
+	private final File itsRoot;
 	private final File itsFlatName;
 	
 	protected MapIO(File root) {
@@ -16,7 +16,7 @@ public class MapIO {
 		itsFlatName = new File(root.getParentFile(), root.getName() + ".ser");
 	}
 
-	protected File getRootFile() {
+	protected File getRootPath() {
 		return itsRoot;
 	}
 

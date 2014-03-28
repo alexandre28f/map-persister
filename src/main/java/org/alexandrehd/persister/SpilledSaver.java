@@ -5,8 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 
-/**	Saving machinery which spills out higher levels of the map it's saving into a folder structure,
- 	for manual inspection and manipulation.
+/**	Saving machinery which spills out higher levels of the map it's saving
+ 	into a folder structure, for manual inspection and manipulation.
  	
  	@author nick
  */

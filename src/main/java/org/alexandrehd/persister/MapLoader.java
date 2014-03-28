@@ -1,12 +1,20 @@
 package org.alexandrehd.persister;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.util.HashMap;
 
-public class MapLoader extends MapIO implements IMapLoader {
+/**	An interface for reading an entire map from a location, which is either
+	a flat file (we add the extension) or a directory. For hysterical reasons,
+	We instantiate a MapLoader on each root location.
+	
+	@author Nick Rothwell, nick@cassiel.com
+*/
+
+class MapLoader extends MapIO {
 	public MapLoader(File root) {
 		super(root);
 	}
@@ -14,8 +22,8 @@ public class MapLoader extends MapIO implements IMapLoader {
 	private Object loadNodeFromRoot() throws ClassNotFoundException, IOException {
 		if (getFlatFile().exists()) {
 			return loadObjectFromRoot();
-		} else {
-			File root = getRootFile();
+		} else if (getRootPath().exists()) {
+			File root = getRootPath();
 			File[] contents = root.listFiles();
 			if (contents == null) {
 				throw new IOException("cannot read directory at: " + root);
@@ -35,12 +43,14 @@ public class MapLoader extends MapIO implements IMapLoader {
 				
 				return result;
 			}
+		} else {
+			throw new FileNotFoundException("cannot find node at " + getRootPath());
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override
-	public HashMap<String, ?> loadFromRoot() throws ClassNotFoundException, IOException {
+	//@Override
+	HashMap<String, ?> loadFromRoot() throws ClassNotFoundException, IOException {
 		return (HashMap<String, ?>) loadNodeFromRoot();
 	}
 

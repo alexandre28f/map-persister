@@ -5,7 +5,10 @@ import java.util.HashMap;
 
 /**	An interface for writing a map to a location, either as a flat file
     (with extension added) or nested structure, according to a depth.
-    Completely removes any existing file and/or structure at this location.
+    
+    <P>WARNING: Don't use this directly; there is (or will be) a difference-based
+    saver which preserves existing files. {@link IMapSaver} completely removes any existing
+    file and/or structure at the root location.
     
  	@author Nick Rothwell, nick@cassiel.com
  */

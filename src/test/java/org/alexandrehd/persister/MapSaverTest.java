@@ -62,15 +62,6 @@ public class MapSaverTest {
 		assertEquals(m, new MapLoader(f).loadFromRoot());
 	}
 	
-	@Test(expected=IllegalArgumentException.class)
-	public void bouncesBadTypes() throws IOException {
-		Map<String, Date> m = new HashMap<String, Date>();
-		m.put("FOO", new Date());
-		
-		File f = folder.newFile();
-		new MapSaver(f).saveToRoot((HashMap<String, ?>) m, 0);
-	}
-	
 	@Test
 	public void savesFilesToDepth1() throws Exception {
 		HashMap<String, HashMap<String, Object>> m = testMap();
@@ -104,23 +95,5 @@ public class MapSaverTest {
 		
 		new MapSaver(root).saveToRoot(m, 1);
 		assertFalse(ser.exists());
-	}
-	
-	static class Fooble<T> extends HashMap<String, T> {
-		private static final long serialVersionUID = 1L;
-	}
-	
-	@Test(expected=IllegalArgumentException.class)
-	public void cannotSaveHashMapSubclass() throws IOException {
-		new MapSaver(folder.newFile()).saveToRoot(new Fooble<Double>(), 0);
-	}
-
-	@Test(expected=IllegalArgumentException.class)
-	public void cannotSaveInnerHashMapSubclass() throws IOException {
-		Fooble<Double> fd = new Fooble<Double>();
-		HashMap<String, HashMap<String, Double>> m = new HashMap<String, HashMap<String, Double>>();
-		m.put("FOOBLE", fd);
-		
-		new MapSaver(folder.newFile()).saveToRoot(m, 0);
 	}
 }

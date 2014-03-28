@@ -16,11 +16,11 @@ import kill.interf.newps.IPrincipalPresetManager;
 import kill.presetmanager.EditBuffer;
 import kill.presetmanager.newps.PrincipalPresetManager;
 import kill.presetmanager.newps.SecondaryPresetManager;
-import kill.util.Cloner;
 import kill.util.IMultiLinePrinter;
 import kill.util.TestingManifest;
 
 import org.alexandrehd.persister.legacy.VectorParam;
+import org.alexandrehd.persister.util.Cloner;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;

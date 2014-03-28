@@ -10,11 +10,22 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class MapSaver extends MapIO implements IMapSaver {
-	public MapSaver(File root) {
+/**	A class for writing a map to a location, either as a flat file
+	(with extension added) or nested structure, according to a depth.
+
+	<P>WARNING: Don't use this directly; there is (or will be) a difference-based
+	saver which preserves existing files. {@link MapSaver} completely removes any existing
+	file and/or structure at the root location.
+
+	@author Nick Rothwell, nick@cassiel.com
+*/
+
+class MapSaver extends MapIO {
+	MapSaver(File root) {
 		super(root);
 	}
 
+	/* TODO: this functionality should move to the delta-based saver. */
 	static final Set<Class<?>> allowedTypes;
 	
 	//	Set up the kinds of object we allow in our maps (we also allow nested maps):
@@ -45,7 +56,7 @@ public class MapSaver extends MapIO implements IMapSaver {
 		if (depth == 0) {
 			saveObjectToRoot(obj);
 		} else if (obj.getClass() == HashMap.class) {
-			File root = getRootFile();
+			File root = getRootPath();
 			if (!root.mkdir()) { throw new IOException("could not create directory " + root); }
 
 			@SuppressWarnings("unchecked")
@@ -53,7 +64,7 @@ public class MapSaver extends MapIO implements IMapSaver {
 
 			for (Map.Entry<String, ?> e: m.entrySet()) {
 				String key = e.getKey();
-				MapSaver saver = new MapSaver(new File(getRootFile(), key));
+				MapSaver saver = new MapSaver(new File(getRootPath(), key));
 				saver.saveNode(e.getValue(), depth - 1);
 			}
 		} else {
@@ -69,8 +80,8 @@ public class MapSaver extends MapIO implements IMapSaver {
 	 	@see org.alexandrehd.persister.IMapSaver#saveToRoot(java.util.HashMap, int)
 	 */
 
-	@Override
-	public void saveToRoot(HashMap<String, ?> item, int depth) throws IOException {
+	//@Override
+	void saveToRoot(HashMap<String, ?> item, int depth) throws IOException {
 		//	TODO this check should be lifted into the main delta-based persister
 		//	(once we've written it).
 		checkAllTypesOK(item);
@@ -92,7 +103,7 @@ public class MapSaver extends MapIO implements IMapSaver {
     private void deleteRoot() throws FileNotFoundException {
 		getFlatFile().delete();
 		
-		File r = getRootFile();
+		File r = getRootPath();
 		if (r.exists()) {  deleteRecursive(r); }
 	}
 
