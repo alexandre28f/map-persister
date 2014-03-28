@@ -1,14 +1,18 @@
 (ns user
-  (:import (org.alexandrehd.presetter SpilledSaver)))
+  (:import (org.alexandrehd.persister MapPersister)))
 
-(def my-saver (SpilledSaver. (java.io.File. "/tmp/grotty") 3))
+(def m
+  (let [m (java.util.HashMap.)]
+    (.put m "A" 4.5)
+    (.put m "B" 3.1)
+    m))
 
-(def m (java.util.HashMap.))
+(def my-saver (MapPersister. (java.io.File. "/tmp/grotty") 1))
 
 ;; No support yet for boxed numericals:
 ;;(.put m "A" 12)
 ;;(.put m "B" 6.7)
 
-(.put m "MyString" "Hello World")
-
 (.persist my-saver m)
+
+(.unpersist my-saver)
