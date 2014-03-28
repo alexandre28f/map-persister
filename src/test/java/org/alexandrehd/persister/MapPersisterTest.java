@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -194,5 +195,73 @@ public class MapPersisterTest {
 		m.put("FOOBLE", fd);
 		
 		new MapPersister(folder.newFile(), 0).persist(m);
+	}
+	
+	@Test
+	public void unchangedMapWillNotOverwriteDir() throws Exception {
+		File f = new File(folder.getRoot(), "a");
+		File f_ser = new File(f.getParentFile(), "a.ser");
+		MapPersister saver = new MapPersister(f, 2);
+
+		saver.persist(testMap());
+		assertTrue("expecting directory/1", f.isDirectory());
+		assertFalse("not expecting flat file/1", f_ser.isFile());
+		
+		saver = new MapPersister(f, 0);
+		saver.persist(testMap());
+		assertTrue("expecting directory/2", f.isDirectory());
+		assertFalse("not expecting flat file/2", f_ser.isFile());
+	}
+
+	@Test
+	public void unchangedMapWillNotOverwriteFlat() throws Exception {
+		File f = new File(folder.getRoot(), "a");
+		File f_ser = new File(f.getParentFile(), "a.ser");
+		MapPersister saver = new MapPersister(f, 0);
+
+		saver.persist(testMap());
+		assertFalse("not expecting directory/1", f.isDirectory());
+		assertTrue("expecting flat file/1", f_ser.isFile());
+		
+		saver = new MapPersister(f, 2);
+		saver.persist(testMap());
+		assertFalse("not expecting directory/2", f.isDirectory());
+		assertTrue("expecting flat file/2", f_ser.isFile());
+	}
+
+	@Test
+	public void changedMapWillOverwriteDir() throws Exception {
+		File f = new File(folder.getRoot(), "a");
+		File f_ser = new File(f.getParentFile(), "a.ser");
+		MapPersister saver = new MapPersister(f, 2);
+
+		saver.persist(testMap());
+		assertTrue("expecting directory/1", f.isDirectory());
+		assertFalse("not expecting flat file/1", f_ser.isFile());
+		
+		HashMap<String, HashMap<String, Object>> m = testMap();
+		m.get("TOP").put("GOO", 25.8);
+		saver = new MapPersister(f, 0);
+		saver.persist(m);
+		assertFalse("not expecting directory/2", f.isDirectory());
+		assertTrue("expecting flat file/2", f_ser.isFile());
+	}
+
+	@Test
+	public void changedMapWillOverwriteFlat() throws Exception {
+		File f = new File(folder.getRoot(), "a");
+		File f_ser = new File(f.getParentFile(), "a.ser");
+		MapPersister saver = new MapPersister(f, 0);
+
+		saver.persist(testMap());
+		assertFalse("not expecting directory/1", f.isDirectory());
+		assertTrue("expecting flat file/1", f_ser.isFile());
+		
+		HashMap<String, HashMap<String, Object>> m = testMap();
+		m.get("TOP").put("GOO", 25.8);
+		saver = new MapPersister(f, 2);
+		saver.persist(m);
+		assertTrue("expecting directory/2", f.isDirectory());
+		assertFalse("not expecting flat file/2", f_ser.isFile());
 	}
 }

@@ -52,7 +52,7 @@ class MapSaver extends MapIO {
 		}
 	}
 	
-	private void saveNode(Object obj, int depth) throws IOException {
+	/*package*/ void saveNode(Object obj, int depth) throws IOException {
 		if (depth == 0) {
 			saveObjectToRoot(obj);
 		} else if (obj.getClass() == HashMap.class) {
@@ -81,6 +81,7 @@ class MapSaver extends MapIO {
 	 */
 
 	//@Override
+	@Deprecated
 	void saveToRoot(HashMap<String, ?> item, int depth) throws IOException {
 		//	TODO this check should be lifted into the main delta-based persister
 		//	(once we've written it).
@@ -100,7 +101,7 @@ class MapSaver extends MapIO {
         return ret && path.delete();
     }
     
-    private void deleteRoot() throws FileNotFoundException {
+    void deleteRoot() throws FileNotFoundException {
 		getFlatFile().delete();
 		
 		File r = getRootPath();
